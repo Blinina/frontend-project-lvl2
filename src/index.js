@@ -1,24 +1,22 @@
-import _ from 'lodash';
+import fs from 'fs'
+import {resolve}  from 'path'
+import genDifferents from '../src/index.js'
 
-const genDiff = (filepath1, filepath2) => {
-  let result = '';
-  const keys1 = _.union(_.keys(filepath1), _.keys(filepath2));
-  const keys = _.sortBy(keys1);
-  result = keys.map((key) => {
-    if (Object.hasOwn(filepath1, String(key)) && !Object.hasOwn(filepath2, String(key))) {
-      return `- ${key}: ${filepath1[key]}`;
-    }
-    if (!Object.hasOwn(filepath1, String(key)) && Object.hasOwn(filepath2, String(key))) {
-      return `+ ${key}: ${filepath2[key]}`;
-    }
-    if (filepath1[key] === filepath2[key]) {
-      return `${key}: ${filepath2[key]}`;
-    }
-    if (filepath1[key] !== filepath2[key]) {
-      return `- ${key}: ${filepath1[key]}\n+ ${key}: ${filepath2[key]}`;
-    }
-  });
-  return result.join('\n');
-};
+const genDiff = (filepath1, filepath2) =>{
 
+    const absolutPath1 = resolve(filepath1);
+    const absolutPath2 = resolve(filepath2);
+
+
+    const contentFile1  = fs.readFileSync(absolutPath1, 'utf8');
+    const contentFile2  = fs.readFileSync(absolutPath2, 'utf8');
+
+    const date1 = JSON.parse(contentFile1);
+    const date2 = JSON.parse(contentFile2);
+
+    const result = genDifferents(date1, date2);
+    return result;
+    
+
+}
 export default genDiff;
