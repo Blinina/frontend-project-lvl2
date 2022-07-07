@@ -2,7 +2,6 @@
 import { Command } from 'commander';
 import genDiff from '../src/index.js';
 
-
 const program = new Command();
 program
   .description('Compare two configureation files and shows a difference.')
