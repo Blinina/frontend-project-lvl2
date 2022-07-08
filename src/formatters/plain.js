@@ -13,23 +13,25 @@ const plain = (data) => {
   };
 
   const iter = (node, acc) => {
-    const result = node.map((dkey) => {
-      const fullPath = (acc === '') ? `${dkey.key}` : `${acc}.${dkey.key}`;
-      let arrResult;
-      if (dkey.type === 'removed') {
-        arrResult = `Property '${fullPath}' was removed`;
-      }
-      if (dkey.type === 'added') {
-        arrResult = `Property '${fullPath}' was added with value: ${formatValue(dkey.value)}`;
-      }
-      if (dkey.type === 'changed') {
-        arrResult = `Property '${fullPath}' was updated. From ${formatValue(dkey.value1)} to ${formatValue(dkey.value2)}`;
-      }
-      if (dkey.type === 'nested') {
-        arrResult = `${iter(dkey.children, fullPath)}`;
-      }
-      return arrResult;
-    });
+    const result = node
+      .filter((dkey) => dkey.type !== 'unchanged')
+      .map((dkey) => {
+        const fullPath = (acc === '') ? `${dkey.key}` : `${acc}.${dkey.key}`;
+        switch (dkey.type) {
+          case 'removed':
+            return `Property '${fullPath}' was removed`;
+
+          case 'added':
+            return `Property '${fullPath}' was added with value: ${formatValue(dkey.value)}`;
+          case 'changed':
+            return `Property '${fullPath}' was updated. From ${formatValue(dkey.value1)} to ${formatValue(dkey.value2)}`;
+          case 'nested':
+            return `${iter(dkey.children, fullPath)}`;
+
+          default:
+            throw new Error(`Такого типа не существует ${dkey.type}`);
+        }
+      });
     return result.join('\n').replace(/\n+/g, '\n');
   };
   return iter(data, '');

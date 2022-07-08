@@ -3,20 +3,15 @@ import stylish from './stylish.js';
 import formattJson from './json.js';
 
 const formatt = (data, format = 'stylish') => {
-  let result;
   switch (format) {
     case 'plain':
-      result = plain(data);
-      break;
+      return plain(data);
     case 'stylish':
-      result = stylish(data);
-      break;
+      return stylish(data);
     case 'json':
-      result = formattJson(data);
-      break;
+      return formattJson(data);
     default:
       throw new Error();
   }
-  return result;
 };
 export default formatt;
