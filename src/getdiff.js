@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
-const genDifferents = (file1, file2) => {
-  const keys1 = _.union(_.keys(file1), _.keys(file2));
-  const keys = _.sortBy(keys1);
-  const difKeys = keys.map((key) => {
+const getTreeDiff = (file1, file2) => {
+  const generalKeys = _.union(_.keys(file1), _.keys(file2));
+  const keys = _.sortBy(generalKeys);
+  const sortTypeKeys = keys.map((key) => {
     if (!_.has(file1, key)) {
       return { key, type: 'added', value: file2[key] };
     }
@@ -11,7 +11,7 @@ const genDifferents = (file1, file2) => {
       return { key, type: 'removed', value: file1[key] };
     }
     if (_.isObject(file1[key]) && _.isObject(file2[key])) {
-      return { key, type: 'nested', children: genDifferents(file1[key], file2[key]) };
+      return { key, type: 'nested', children: getTreeDiff(file1[key], file2[key]) };
     }
     if (file1[key] !== file2[key]) {
       return {
@@ -20,7 +20,7 @@ const genDifferents = (file1, file2) => {
     }
     return { key, type: 'unchanged', value: file1[key] };
   });
-  return difKeys;
+  return sortTypeKeys;
 };
 
-export default genDifferents;
+export default getTreeDiff;

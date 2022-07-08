@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import genDifferents from './getdiff.js';
+import getTreeDiff from './getdiff.js';
 import parse from './parsers.js';
 import formatt from './formatters/index.js';
 
@@ -16,7 +16,7 @@ const genDiff = (filepath1, filepath2, outputformat) => {
 
   const data1 = parse(contentFile1, extnamefile1);
   const data2 = parse(contentFile2, extnamefile2);
-  const result = genDifferents(data1, data2);
+  const result = getTreeDiff(data1, data2);
 
   return formatt(result, outputformat);
 };

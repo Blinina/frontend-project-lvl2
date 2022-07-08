@@ -6,14 +6,14 @@ const getSpace = (defaultDepth) => {
   return defoultSpace;
 };
 
-const formattedValue = (value, newdepth) => {
+const getformattedValue = (value, depth) => {
   if (!_.isObject(value)) {
     return `${value}`;
   }
-  const newspace = getSpace(newdepth);
-  const newspaceClose = getSpace(newdepth - 1);
+  const newspace = getSpace(depth);
+  const newspaceClose = getSpace(depth - 1);
   const elements = Object.entries(value);
-  const result = elements.map(([keys, elvalue]) => `${newspace}  ${keys}: ${formattedValue(elvalue, newdepth + 2)}`);
+  const result = elements.map(([keys, elValue]) => `${newspace}  ${keys}: ${getformattedValue(elValue, depth + 2)}`);
 
   return ['{', ...result, `${newspaceClose}}`].join('\n');
 };
@@ -29,19 +29,19 @@ const stylish = (data) => {
           return `${space}  ${dkey.key}: {\n${iter(dkey.children, depth + 2)}`;
         }
         case 'unchanged': {
-          return `${space}  ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
+          return `${space}  ${dkey.key}: ${getformattedValue(dkey.value, depth + 2)}`;
         }
         case 'removed': {
-          return `${space}- ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
+          return `${space}- ${dkey.key}: ${getformattedValue(dkey.value, depth + 2)}`;
         }
         case 'added': {
-          return `${space}+ ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
+          return `${space}+ ${dkey.key}: ${getformattedValue(dkey.value, depth + 2)}`;
         }
         case 'changed': {
-          return `${space}- ${dkey.key}: ${formattedValue(dkey.value1, depth + 2)}\n${space}+ ${dkey.key}: ${formattedValue(dkey.value2, depth + 2)}`;
+          return `${space}- ${dkey.key}: ${getformattedValue(dkey.value1, depth + 2)}\n${space}+ ${dkey.key}: ${getformattedValue(dkey.value2, depth + 2)}`;
         }
         default: {
-          return null;
+          throw new Error(`This type in not exsist: ${dkey.type}`);
         }
       }
     });
