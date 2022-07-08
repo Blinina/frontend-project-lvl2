@@ -5,11 +5,10 @@ const plain = (data) => {
     if (_.isObject(value)) {
       return '[complex value]';
     }
-    if (value === null) {
-      return null;
+    if (_.isString(value)) {
+      return `'${value}'`;
     }
-
-    return _.isString(value) ? `'${value}'` : value;
+    return value;
   };
 
   const iter = (node, acc) => {
@@ -20,16 +19,14 @@ const plain = (data) => {
         switch (dkey.type) {
           case 'removed':
             return `Property '${fullPath}' was removed`;
-
           case 'added':
             return `Property '${fullPath}' was added with value: ${formatValue(dkey.value)}`;
           case 'changed':
             return `Property '${fullPath}' was updated. From ${formatValue(dkey.value1)} to ${formatValue(dkey.value2)}`;
           case 'nested':
             return `${iter(dkey.children, fullPath)}`;
-
           default:
-            throw new Error(`Такого типа не существует ${dkey.type}`);
+            throw new Error(`This type is not exist ${dkey.type}`);
         }
       });
     return result.join('\n').replace(/\n+/g, '\n');

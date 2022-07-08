@@ -11,7 +11,7 @@ const formatt = (data, format = 'stylish') => {
     case 'json':
       return formattJson(data);
     default:
-      throw new Error();
+      throw new Error(`This format is not exist ${format}`);
   }
 };
 export default formatt;
