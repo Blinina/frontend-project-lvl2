@@ -11,13 +11,11 @@ const formatt = (data, format = 'stylish') => {
     case 'stylish':
       result = stylish(data);
       break;
-
     case 'json':
       result = formattJson(data);
       break;
-
-// default:
-//    throw new Error;
+    default:
+      throw new Error();
   }
   return result;
 };

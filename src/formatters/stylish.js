@@ -1,51 +1,53 @@
 import _ from 'lodash';
 
-const getSpace = (defoltTab = 4, depth) => {
-  const tab = ' ';
-  const space = tab.repeat(defoltTab * depth - 2);
-  return space;
+const getSpace = (defaultDepth) => {
+  const tab = '  ';
+  const defoultSpace = tab.repeat(defaultDepth);
+  return defoultSpace;
 };
 
 const formattedValue = (value, newdepth) => {
   if (!_.isObject(value)) {
-    return value;
+    return `${value}`;
   }
-  const space = getSpace(5, newdepth + 1);
-  const spaceClose = getSpace(4, newdepth + 2);
+  const newspace = getSpace(newdepth);
+  const newspaceClose = getSpace(newdepth - 1);
   const elements = Object.entries(value);
-  const [[key, elvalue]] = elements;
-  const result = elements.map((element) => `${space}  ${key}: ${formattedValue(elvalue, newdepth + 1)}\n ${spaceClose}}`);
-  return `{\n${space}${result.join('\n')}`;
+  const result = elements.map(([keys, elvalue]) => `${newspace}  ${keys}: ${formattedValue(elvalue, newdepth + 2)}`);
+
+  return ['{', ...result, `${newspaceClose}}`].join('\n');
 };
 
 const stylish = (data) => {
   const iter = (node, depth) => {
-    const space = getSpace(4, depth);
+    const space = getSpace(depth);
+    const spaceClose = getSpace(depth - 1);
+
     const stylishArr = node.map((dkey) => {
       switch (dkey.type) {
         case 'nested': {
-          return `${space}  ${dkey.key}: {\n${iter(dkey.children, depth + 1)}\n}`;
+          return `${space}  ${dkey.key}: {\n${iter(dkey.children, depth + 2)}`;
         }
         case 'unchanged': {
-          return `${space}  ${dkey.key}: ${(dkey.value)}`;
+          return `${space}  ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
         }
-        case 'deleted': {
-          return `${space}- ${dkey.key}: ${formattedValue(dkey.value)}`;
+        case 'removed': {
+          return `${space}- ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
         }
         case 'added': {
-          return `${space}+ ${dkey.key}: ${formattedValue(dkey.value)}`;
+          return `${space}+ ${dkey.key}: ${formattedValue(dkey.value, depth + 2)}`;
         }
         case 'changed': {
-          return `${space}- ${dkey.key}: ${formattedValue(dkey.value1)}\n${space}+ ${dkey.key}: ${formattedValue(dkey.value2)}`;
+          return `${space}- ${dkey.key}: ${formattedValue(dkey.value1, depth + 2)}\n${space}+ ${dkey.key}: ${formattedValue(dkey.value2, depth + 2)}`;
         }
         default: {
           return null;
         }
       }
     });
-    return stylishArr.join('\n');
+    return [...stylishArr, `${spaceClose}}`].join('\n');
   };
-  const result = `{\n${iter(data, 1)}\n}`;
+  const result = `{\n${iter(data, 1)}`;
   return result;
 };
 

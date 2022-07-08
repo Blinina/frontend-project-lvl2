@@ -13,21 +13,22 @@ const plain = (data) => {
   };
 
   const iter = (node, acc) => {
-    const result = node.flatMap((dkey) => {
+    const result = node.map((dkey) => {
       const fullPath = (acc === '') ? `${dkey.key}` : `${acc}.${dkey.key}`;
-
+      let arrResult;
       if (dkey.type === 'removed') {
-        return `Property '${fullPath}' was removed`;
+        arrResult = `Property '${fullPath}' was removed`;
       }
       if (dkey.type === 'added') {
-        return `Property '${fullPath}' was added with value: ${formatValue(dkey.value)}`;
+        arrResult = `Property '${fullPath}' was added with value: ${formatValue(dkey.value)}`;
       }
       if (dkey.type === 'changed') {
-        return `Property '${fullPath}' was updated. From ${formatValue(dkey.value1)} to ${formatValue(dkey.value2)}`;
+        arrResult = `Property '${fullPath}' was updated. From ${formatValue(dkey.value1)} to ${formatValue(dkey.value2)}`;
       }
       if (dkey.type === 'nested') {
-        return `${iter(dkey.children, fullPath)}`;
+        arrResult = `${iter(dkey.children, fullPath)}`;
       }
+      return arrResult;
     });
     return result.join('\n').replace(/\n+/g, '\n');
   };
