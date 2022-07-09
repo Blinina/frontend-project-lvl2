@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+
     # The type of machine to run the job on
     runs-on: ubuntu-latest
 
@@ -17,8 +18,8 @@ jobs:
         node-version: [14.x]
 
     steps:
-      # Check-out repository under GitHub workspace
-      # https://github.com/actions/checkout
+        # Check-out repository under GitHub workspace
+        # https://github.com/actions/checkout
       - uses: actions/checkout@v2
         # Step's name
       - name: Use Node.js ${{ matrix.node-version }}
@@ -44,7 +45,6 @@ jobs:
         # https://github.com/paambaati/codeclimate-action
         uses: paambaati/codeclimate-action@v2.7.4
         # Add Code Climate secret key
-        env:
           CC_TEST_REPORTER_ID: ${{ secrets.TEST_COVERAGE }}
         with:
           coverageCommand: make test-coverage
