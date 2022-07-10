@@ -8,8 +8,8 @@ const genDiff = (filepath1, filepath2, outputformat) => {
   const absolutPath1 = path.resolve(process.cwd(), '__fixtures__', filepath1);
   const absolutPath2 = path.resolve(process.cwd(), '__fixtures__', filepath2);
 
-  const extnamefile1 = path.extname(absolutPath1);
-  const extnamefile2 = path.extname(absolutPath2);
+  const extnamefile1 = path.extname(absolutPath1).split('.')[1];
+  const extnamefile2 = path.extname(absolutPath2).split('.')[1];
 
   const contentFile1 = fs.readFileSync(absolutPath1, 'utf8');
   const contentFile2 = fs.readFileSync(absolutPath2, 'utf8');

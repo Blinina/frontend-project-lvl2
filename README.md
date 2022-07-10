@@ -5,6 +5,28 @@
 ### Test Coverage:
 [![Test Coverage](https://api.codeclimate.com/v1/badges/8eb5084a80bb5cefaf3b/test_coverage)](https://codeclimate.com/github/Blinina/frontend-project-lvl2/test_coverage)
 
+#### Clone this repository
+
+````
+$ git clone https://github.com/Blinina/frontend-project-lvl2.git
+````
+#### Setting
+
+````
+$ make install
+$ npm link
+
+````
+#### Display help information
+```
+$ gendiff -h
+
+```
+#### Using exampl
+
+```
+$ gendiff file1.json file2.json
+```
 
 ### Examples
 
