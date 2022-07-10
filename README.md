@@ -5,24 +5,34 @@
 ### Test Coverage:
 [![Test Coverage](https://api.codeclimate.com/v1/badges/8eb5084a80bb5cefaf3b/test_coverage)](https://codeclimate.com/github/Blinina/frontend-project-lvl2/test_coverage)
 
+#### Program description
+
+The program Gendiff compares the configurations of two files and shows their differences.
+
+Supports file formats: Json and Yaml.
+Gendiff presents a report in the formats: plain text, stylish and json.
+
 #### Clone this repository
 
 ````
 $ git clone https://github.com/Blinina/frontend-project-lvl2.git
 ````
-#### Setting
+#### Install dependenses 
 
 ````
 $ make install
-$ npm link
-
 ````
+#### Install system link
+````
+$ npm link
+````
+
 #### Display help information
 ```
 $ gendiff -h
 
 ```
-#### Using exampl
+#### Using example
 
 ```
 $ gendiff file1.json file2.json
